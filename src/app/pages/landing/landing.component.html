@@ -1,91 +1,73 @@
-<div class="landing-wrapper">
-  <header class="app-header">
+<div class="page">
+  <header class="header">
     <div class="header-inner">
       <div class="brand">
-        <mat-icon class="brand-icon">sticky_note_2</mat-icon>
+        <span class="brand-dot"></span>
         <span class="brand-name">NoteKeeper</span>
       </div>
-
       <div class="user-area">
         @if (avatarUrl) {
           <img [src]="avatarUrl" alt="avatar" class="avatar" />
         }
         <span class="user-name">{{ userName }}</span>
-        <button mat-button class="sign-out-btn" (click)="signOut()" matTooltip="Sign out">
-          <mat-icon>logout</mat-icon>
+        <button class="sign-out" (click)="signOut()" title="Sign out">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
         </button>
       </div>
     </div>
   </header>
 
-  <main class="main-content">
-    <div class="page-meta">
-      <h2 class="page-title">My Notes</h2>
-      @if (!loading()) {
-        <span class="note-count">{{ notes().length }} note{{ notes().length !== 1 ? 's' : '' }}</span>
-      }
+  <main class="main">
+    <div class="page-top">
+      <div>
+        <h1 class="page-title">My Notes</h1>
+        @if (!loading()) {
+          <p class="page-sub">{{ notes().length }} {{ notes().length === 1 ? 'note' : 'notes' }}</p>
+        }
+      </div>
+      <button class="new-btn" (click)="createNew()" title="New note">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New note
+      </button>
     </div>
 
     @if (loading()) {
-      <div class="loading-state">
-        <mat-spinner diameter="40" />
-        <p>Loading your notes…</p>
+      <div class="loading">
+        <div class="spinner"></div>
+        <span>Loading…</span>
       </div>
     } @else if (notes().length === 0) {
-      <div class="empty-state">
-        <mat-icon class="empty-icon">note_add</mat-icon>
-        <h3>No notes yet</h3>
-        <p>Click the <strong>+</strong> button to create your first note.</p>
+      <div class="empty">
+        <p class="empty-icon">✦</p>
+        <p class="empty-title">No notes yet</p>
+        <p class="empty-sub">Hit <strong>New note</strong> to get started.</p>
       </div>
     } @else {
-      <div class="notes-grid">
+      <div class="grid">
         @for (note of notes(); track note.id) {
-          <mat-card
-            class="note-card"
-            [class.note-card--locked]="note.is_locked"
-            appearance="outlined"
-          >
-            <mat-card-header>
-              <mat-card-title class="note-title">{{ note.title }}</mat-card-title>
-              <mat-card-subtitle>{{ note.updated_at | date: 'MMM d, y · h:mm a' }}</mat-card-subtitle>
-              <span class="status-badge" [class.status-badge--locked]="note.is_locked">
-                <mat-icon>{{ note.is_locked ? 'lock' : 'lock_open' }}</mat-icon>
-                {{ note.is_locked ? 'Locked' : 'Editable' }}
+          <div class="card" [class.card--locked]="note.is_locked">
+            <div class="card-top">
+              <span class="card-status" [class.card-status--locked]="note.is_locked">
+                {{ note.is_locked ? '🔒' : '✎' }}
               </span>
-            </mat-card-header>
-
-            <mat-card-content>
-              <p class="note-preview">
-                {{ stripHtml(note.content) | slice: 0 : 160
-                }}{{ stripHtml(note.content).length > 160 ? '…' : '' }}
-              </p>
-            </mat-card-content>
-
-            <mat-card-actions align="end">
-              @if (!note.is_locked) {
-                <button mat-stroked-button color="primary" (click)="openNote(note.id)">
-                  <mat-icon>edit</mat-icon> Edit
-                </button>
-              } @else {
-                <button mat-stroked-button (click)="openNote(note.id)">
-                  <mat-icon>visibility</mat-icon> View
-                </button>
-              }
-            </mat-card-actions>
-          </mat-card>
+              <span class="card-date">{{ note.updated_at | date: 'MMM d, y' }}</span>
+            </div>
+            <h3 class="card-title">{{ note.title }}</h3>
+            <p class="card-preview">
+              {{ stripHtml(note.content) | slice: 0 : 120 }}{{ stripHtml(note.content).length > 120 ? '…' : '' }}
+            </p>
+            <div class="card-footer">
+              <button class="card-btn" (click)="openNote(note.id)">
+                {{ note.is_locked ? 'View' : 'Edit' }} →
+              </button>
+            </div>
+          </div>
         }
       </div>
     }
   </main>
-
-  <button
-    mat-fab
-    color="primary"
-    class="fab"
-    (click)="createNew()"
-    matTooltip="Create new note"
-    aria-label="Create new note"
-  >
-    <mat-icon>add</mat-icon>
-  </button>
 </div>

@@ -1,85 +1,110 @@
 .login-wrapper {
   min-height: 100vh;
+  background: #0c0c0c;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 60%, #7986cb 100%);
-  padding: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-.login-card {
-  background: white;
-  border-radius: 20px;
-  padding: 52px 44px;
+.dot-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 70% 70% at center, black 30%, transparent 80%);
+  pointer-events: none;
+}
+
+.login-center {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  max-width: 380px;
+  padding: 0 24px;
+  max-width: 480px;
   width: 100%;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
 }
 
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 56px;
 
-  .brand-icon {
-    font-size: 36px;
-    width: 36px;
-    height: 36px;
-    color: #3f51b5;
+  .brand-dot {
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
   }
 
   .brand-name {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-    color: #1a1a1a;
-    letter-spacing: -0.5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 }
 
-.tagline {
-  color: #9e9e9e;
-  font-size: 14px;
-  margin: 0 0 36px;
+.headline {
+  margin: 0 0 52px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(52px, 9vw, 76px);
+  line-height: 0.95;
+  letter-spacing: -1px;
+  color: white;
+
+  em {
+    font-style: italic;
+    opacity: 0.6;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 .google-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
-  padding: 13px 20px;
+  padding: 13px 28px;
   background: white;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 10px;
+  color: #111;
+  border: none;
+  border-radius: 100px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  font-family: 'Roboto', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: 'Roboto', sans-serif;
+  min-width: 220px;
 
   &:hover:not(:disabled) {
-    border-color: #3f51b5;
-    box-shadow: 0 2px 12px rgba(63, 81, 181, 0.15);
-    background: #fafbff;
+    background: #f0f0f0;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }
 
 .spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #e0e0e0;
-  border-top-color: #3f51b5;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: #111;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;
@@ -90,7 +115,8 @@
 }
 
 .hint {
-  margin: 16px 0 0;
+  margin: 0;
   font-size: 12px;
-  color: #bdbdbd;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.02em;
 }

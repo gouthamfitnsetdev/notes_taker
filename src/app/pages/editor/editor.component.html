@@ -1,42 +1,35 @@
 <div class="editor-wrapper">
   <header class="editor-header">
-    <button mat-icon-button (click)="cancel()" matTooltip="Back to notes" aria-label="Back">
-      <mat-icon>arrow_back</mat-icon>
+    <button class="back-btn" (click)="cancel()" title="Back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back
     </button>
 
-    <span class="mode-label">{{ modeLabel }}</span>
+    <span class="mode-chip" [class.mode-chip--locked]="isReadOnly()">
+      {{ isReadOnly() ? '🔒 Locked' : isNew() ? 'New note' : 'Editing' }}
+    </span>
 
     <div class="header-actions">
-      <button
-        mat-icon-button
-        (click)="downloadNote()"
-        matTooltip="Download as text file"
-        aria-label="Download note"
-      >
-        <mat-icon>download</mat-icon>
+      <button class="action-btn" (click)="downloadNote()" title="Download as .txt">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
       </button>
 
       @if (isReadOnly()) {
-        <button mat-stroked-button (click)="cancel()">
-          <mat-icon>arrow_back</mat-icon> Back
-        </button>
+        <button class="btn-secondary" (click)="cancel()">Close</button>
       } @else {
-        <button mat-button (click)="cancel()" [disabled]="saving()">Cancel</button>
-        <button
-          mat-stroked-button
-          color="warn"
-          (click)="saveAndLock()"
-          [disabled]="saving()"
-          matTooltip="Save and permanently lock — cannot be undone"
-        >
-          <mat-icon>lock</mat-icon> Save &amp; Lock
+        <button class="btn-secondary" (click)="cancel()" [disabled]="saving()">Cancel</button>
+        <button class="btn-lock" (click)="saveAndLock()" [disabled]="saving()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Save &amp; Lock
         </button>
-        <button mat-flat-button color="primary" (click)="save()" [disabled]="saving()">
-          @if (saving()) {
-            <mat-spinner diameter="18" color="accent" />
-          } @else {
-            <mat-icon>save</mat-icon>
-          }
+        <button class="btn-primary" (click)="save()" [disabled]="saving()">
+          @if (saving()) { <span class="btn-spinner"></span> }
           Save
         </button>
       }
@@ -44,41 +37,38 @@
   </header>
 
   @if (initializing()) {
-    <div class="init-spinner">
-      <mat-spinner diameter="40" />
+    <div class="init-loading">
+      <div class="spinner"></div>
     </div>
   } @else {
     <main class="editor-main" [formGroup]="form">
       @if (isReadOnly()) {
-        <div class="locked-banner">
-          <mat-icon>lock</mat-icon>
-          <span>This note is <strong>permanently locked</strong> and cannot be edited.</span>
+        <div class="locked-notice">
+          This note is permanently locked and cannot be edited.
         </div>
       }
 
-      <div class="title-section">
+      <div class="title-area">
         @if (isReadOnly()) {
           <h1 class="view-title">{{ form.getRawValue().title }}</h1>
         } @else {
-          <mat-form-field appearance="outline" class="title-field">
-            <mat-label>Note title</mat-label>
-            <input matInput formControlName="title" placeholder="Give your note a title…" autocomplete="off" />
-            @if (form.get('title')?.hasError('required') && form.get('title')?.touched) {
-              <mat-error>Title is required</mat-error>
-            }
-          </mat-form-field>
+          <input
+            class="title-input"
+            formControlName="title"
+            placeholder="Note title…"
+            autocomplete="off"
+          />
         }
       </div>
 
-      <mat-divider />
+      <div class="divider"></div>
 
-      <div class="quill-wrapper" [class.quill-wrapper--readonly]="isReadOnly()">
+      <div class="quill-area" [class.quill-area--readonly]="isReadOnly()">
         <quill-editor
           formControlName="content"
           [modules]="isReadOnly() ? readOnlyModules : quillModules"
           [readOnly]="isReadOnly()"
-          placeholder="Start writing your note…"
-          class="quill-editor"
+          placeholder="Start writing…"
         />
       </div>
     </main>
