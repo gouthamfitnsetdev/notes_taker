@@ -1,27 +1,55 @@
-# NoteTaker
+# NoteKeeper
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+A minimal note-taking app where you can write, save, and permanently lock notes. Built with Angular 18 and backed by Supabase — notes sync across devices and stay private to your account.
 
-## Development server
+**Live:** https://notes-taker-snowy.vercel.app
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+**Demo:** https://youtu.be/GXvAYUNSe6o
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## What it does
 
-## Build
+- Sign in with Google — no separate account needed
+- Create notes with a rich text editor (bold, italic, lists, headings, links)
+- Edit any unlocked note whenever you want
+- **Save & Lock** a note to make it permanently read-only — good for things you don't want to accidentally change later
+- Download any note as a plain `.txt` file
+- All notes are private to your account
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## Pages
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+**Login** — Google sign-in, redirects straight to your notes after auth.
 
-## Running end-to-end tests
+**Notes list** — all your notes as cards with last edited date and lock status. Create new ones from here.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+**Editor** — WYSIWYG editor for writing. Save, Cancel, Save & Lock. Locked notes open in read-only view.
 
-## Further help
+---
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Stack
+
+| What | Why |
+|---|---|
+| **Angular 18** | Standalone components, new `@if`/`@for` template syntax throughout |
+| **Angular Signals** | State management with `signal()`, `computed()`, `effect()` — cleaner than RxJS subjects at this scale |
+| **Angular Material** | Confirmation dialog for locking, snackbar feedback on save |
+| **ngx-quill / Quill.js** | WYSIWYG rich text editor |
+| **Supabase** | Google OAuth + Postgres. RLS policies ensure each user only sees their own notes |
+| **Reactive Forms** | Title input with validation in the editor |
+| **Vercel** | Hosting, auto-deploys on every push to main |
+
+---
+
+## Running locally
+
+```bash
+git clone https://github.com/gouthamfitnsetdev/notes_taker.git
+cd notes_taker
+npm install --legacy-peer-deps
+ng serve --port 4300
+```
+
+Open `http://localhost:4300`
