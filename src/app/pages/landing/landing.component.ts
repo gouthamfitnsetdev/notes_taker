@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatePipe, SlicePipe } from '@angular/common';
 import { AuthService } from '../../core/auth.service';
@@ -15,6 +15,14 @@ export class LandingComponent {
   private router = inject(Router);
   protected auth = inject(AuthService);
   protected noteService = inject(NoteService);
+
+  constructor() {
+    effect(() => {
+      if (!this.auth.loading() && !this.auth.user()) {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 
   readonly notes = this.noteService.notes;
   readonly loading = this.noteService.loading;
