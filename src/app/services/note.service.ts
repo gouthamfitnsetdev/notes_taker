@@ -21,7 +21,7 @@ export class NoteService {
       } else {
         this._notes.set([]);
       }
-    });
+    }, { allowSignalWrites: true });
   }
 
   async loadAll(): Promise<void> {

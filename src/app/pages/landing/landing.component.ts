@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, OnInit, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatePipe, SlicePipe } from '@angular/common';
 import { AuthService } from '../../core/auth.service';
@@ -11,7 +11,7 @@ import { NoteService } from '../../services/note.service';
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit {
   private router = inject(Router);
   protected auth = inject(AuthService);
   protected noteService = inject(NoteService);
@@ -38,6 +38,8 @@ export class LandingComponent {
 
   createNew(): void { this.router.navigate(['/editor']); }
   openNote(id: string): void { this.router.navigate(['/editor', id]); }
+  ngOnInit(): void { this.noteService.loadAll(); }
+
   signOut(): void { this.auth.signOut(); }
 
   stripHtml(html: string): string {
