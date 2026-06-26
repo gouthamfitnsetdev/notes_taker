@@ -10,9 +10,15 @@ export class AuthService {
   readonly loading = signal(true);
 
   constructor() {
+    // Fallback: if INITIAL_SESSION never fires, unblock after 3s
+    const fallback = setTimeout(() => this.loading.set(false), 3000);
+
     this.sb.client.auth.onAuthStateChange((event, session) => {
       this.user.set(session?.user ?? null);
-      if (event === 'INITIAL_SESSION') this.loading.set(false);
+      if (event === 'INITIAL_SESSION') {
+        clearTimeout(fallback);
+        this.loading.set(false);
+      }
       if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
         window.history.replaceState(null, '', window.location.pathname);
       }
